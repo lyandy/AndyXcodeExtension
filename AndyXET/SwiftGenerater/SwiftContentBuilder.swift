@@ -99,7 +99,7 @@ class SwiftContentBuilder {
 
     func toString() -> String {
         var result: String = "// RootClass.Swift \n"
-        result += "// Model file generated using AndyXET->JSON2Swift: \n\n\n"
+        result += "// Model file generated using AndyXET->JSON2Swift: https://github.com/lyandy/AndyXcodeExtension\n\n\n"
         result += "import Foundation\n"
         result += "import KakaJSON\n"
         

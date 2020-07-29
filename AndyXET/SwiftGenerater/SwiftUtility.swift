@@ -46,19 +46,19 @@ func propertyTypeName(_ value : AnyObject) -> String
     } else if value is NSString {
         let booleans : [String] = ["True", "true", "TRUE", "False", "false", "FALSE"]
         if let _ = booleans.firstIndex(of: (value as! String)) {
-            name = "Bool"
+            name = DataType.bool.toString()
         }else{
-            name = "String"
+            name = DataType.string.toString()
         }
     } else if value is NSNull {
-        name = "AnyObject"
+        name = DataType.generic.toString()
     }
     return name
 }
 
 func typeNameForArrayElements(_ elements: NSArray) -> String{
     var typeName : String = ""
-    let genericType = "AnyObject"
+    let genericType = DataType.generic.toString()
     if elements.count == 0 {
         typeName = genericType
     }
@@ -81,7 +81,7 @@ func typeNameForArrayElements(_ elements: NSArray) -> String{
 
 func typeNameForArrayOfElements(_ elements: NSArray) -> String{
     var typeName : String = ""
-    let genericType = "[AnyObject]"
+    let genericType = "[\(DataType.generic.toString())]"
     if elements.count == 0 {
         typeName = genericType
     }
@@ -111,20 +111,18 @@ func typeForNumber(_ number : NSNumber) -> String
     switch numberType {
     case .charType:
         if (number.int32Value == 0 || number.int32Value == 1){
-            typeName = "Bool"
+            typeName = DataType.bool.toString()
         }else{
-            typeName = "Character"
+            typeName = DataType.character.toString()
         }
     case .shortType, .intType:
-        typeName = "Int"
+        typeName = DataType.int.toString()
     case .floatType, .float32Type, .float64Type:
-        typeName = "Float"
-    case .doubleType:
-        typeName = "Double"
-    case .longType, .longLongType:
-        typeName = "Double"
+        typeName = DataType.float.toString()
+    case .doubleType, .longType, .longLongType:
+        typeName = DataType.double.toString()
     default:
-        typeName = "Int"
+        typeName = DataType.int.toString()
     }
     
     return typeName
@@ -149,15 +147,12 @@ func stringByRemovingControlCharacters(_ string: String) -> String
     let controlChars = CharacterSet.controlCharacters
     var range = string.rangeOfCharacter(from: controlChars)
     var cleanString = string;
-    repeat {
+    while range != nil && !range!.isEmpty {
         cleanString = cleanString.replacingCharacters(in: range!, with: "")
         range = cleanString.rangeOfCharacter(from: controlChars)
-    } while range != nil && !range!.isEmpty
-    
+    }
     return cleanString
 }
-
-
 
 func runOnBackground(_ task: @escaping () -> Void)
 {
