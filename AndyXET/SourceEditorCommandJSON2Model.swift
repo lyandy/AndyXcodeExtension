@@ -18,7 +18,7 @@ class SourceEditorCommandJSON2Model: NSObject, XCSourceEditorCommand {
             return
         }
 
-        runOnUiThread {
+        runOnUIThread {
             let string = NSPasteboard.general.string(forType: .string)
             runOnBackground {
                 let contentBuilder = SwiftContentBuilder(string)

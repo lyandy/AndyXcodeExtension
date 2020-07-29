@@ -161,7 +161,7 @@ func runOnBackground(_ task: @escaping () -> Void)
     }
 }
 
-func runOnUiThread(_ task: @escaping () -> Void)
+func runOnUIThread(_ task: @escaping () -> Void)
 {
     DispatchQueue.main.async(execute: { () -> Void in
         task();
