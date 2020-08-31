@@ -68,15 +68,15 @@ class SwiftContentBuilder {
     private func propertyForValue(_ value: AnyObject, jsonKeyName: String) -> Property {
         var type = propertyTypeName(value)
         
-        var property: Property
+        var property: Property = Property(jsonName: "", type: "")
         
         if value is NSDictionary {
             type = typeNameForPropertyName(jsonKeyName)
             property = Property(jsonName: jsonKeyName, type: type, isArray:false, isCustomClass: true)
         } else if value is NSArray {
-            let array = value as! NSArray
+            let fitstObj = (value as! NSArray).firstObject
                 
-            if array.firstObject is NSDictionary {
+            if fitstObj is NSDictionary {
                 let leafClassName = typeNameForPropertyName(jsonKeyName)
 
                 type = "[\(leafClassName)]"
@@ -85,6 +85,9 @@ class SwiftContentBuilder {
                 property.elementsType = leafClassName
                     
                 property.elementsAreOfCustomType = true
+            } else if fitstObj is NSArray  {
+                property = propertyForValue(fitstObj as AnyObject, jsonKeyName: jsonKeyName)
+                property.elementsType = typeNameForArrayElements(value as! NSArray)
             } else {
                 property = Property(jsonName: jsonKeyName, type: type, isArray: true, isCustomClass: false)
                 property.elementsType = typeNameForArrayElements(value as! NSArray)
@@ -104,12 +107,7 @@ class SwiftContentBuilder {
         result += "import KakaJSON\n"
         
         for rep in representers {
-            result += "\n\n"
-            result += "struct \(rep.className): Convertible {\n"
-            for property in rep.properties {
-                result += "    \(property.toString())\n"
-            }
-            result += "}\n"
+            result += rep.toString()
         }
         
         return result

@@ -18,6 +18,13 @@ struct SwiftModelRepresenter {
     }
     
     func toString() -> String {
-        return ""
+        var result = "\n"
+        result += "struct \(self.className): Convertible {\n"
+        
+        for property in self.properties {
+            result += "    \(property.toString())\n"
+        }
+        result += "}\n"
+        return result
     }
 }
